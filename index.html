@@ -8,8 +8,17 @@
 
     <style>
         img{
-            width: 40%;
-            height: 40%;
+            width: 200px;
+            height: 200px;
+        }
+
+        .onload {
+            text-align: center;
+            font-size: 25px;
+        }
+
+        #news-div {
+            text-align: center;
         }
     </style>
 
@@ -28,44 +37,82 @@
  <div id="news-div"></div>
  
  <div class="onload"></div>
- <div class="container"></div>
+
+ <div class="background"></div>
+ 
     
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-$(document).ready(function() {
+<script type="text/javascript">
+
+
+
+var APIKey = "7ec980d795c04ff1adf6aff993c1eff9";
+
+var queryURL = 'https://newsapi.org/v2/everything?' +
+          'q=raiders' + '&' +
+          'from=2018-09-29&' +
+          'sortBy=popularity&' +
+          'apiKey=7ec980d795c04ff1adf6aff993c1eff9' + '&' +
+          APIKey;
+
+$.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+        
+        console.log(queryURL);
+
+        console.log(response);
+        
+        var random = Math.floor(Math.random() * 10) + 1;
+        
+        var authorName = $("<p>").text("Author: " + response.articles[random].author);
+        var loadOut = $("<img>").attr("src", response.articles[random].urlToImage);
+        var discription = $("<p>").text("Discription: " + response.articles[random].description);
+        var newstitle = $("<h1>").text(response.articles[random].title);
+
+      $(".onload").empty();
+      $(".onload").prepend(loadOut, newstitle, authorName, discription);
+     
+    });
+
 
 
 
 function searchNews(news){
+    
     var queryURL = 'https://newsapi.org/v2/everything?' +
-          'q=raiders' + news + '&' +
+          'q=NFL' + '&' +
           'from=2018-09-29&' +
           'sortBy=popularity&' +
-          'apiKey=7ec980d795c04ff1adf6aff993c1eff9';
+          'apiKey=7ec980d795c04ff1adf6aff993c1eff9' + '&' +
+          APIKey;
+
+    var random = Math.floor(Math.random() * 10) + 1;
+          
 
 
 $.ajax({
     url: queryURL,
       method: "GET"
-    }).then(function(response) {
+    }).done(function(response) {
         
+        console.log(queryURL);
         console.log(response);
         
-        $(".container").attr("src", response.articles[0].urlToImage);
-
         
-        
-        var authorName = $("<p>").text("Author: " + response.articles[0].author);
-        var newsURL = $("<img>").attr("src", response.articles[0].urlToImage);
-        var discription = $("<p>").text("Discription: " + response.articles[0].description);
-        var newstitle = $("<h1>").text(response.articles[0].title);
+        var authorName = $("<p>").text("Author: " + response.articles[random].author);
+        var loadOut = $("<img>").attr("src", response.articles[random].urlToImage);
+        var discription = $("<p>").text("Discription: " + response.articles[random].description);
+        var newstitle = $("<h1>").text(response.articles[random].title);
 
       $("#news-div").empty();
-      $("#news-div").append(newsURL, newstitle, authorName, discription);
+      $("#news-div").append(loadOut, newstitle, authorName, discription);
      
     });
 }
+
 
 $("#select-article").on("click", function(event) {
     // Preventing the button from trying to submit the form
@@ -75,15 +122,10 @@ $("#select-article").on("click", function(event) {
 
     // Running searchNews function(passing in the artist as an argument)
     searchNews(inputArticle);
-    $("#news-div").empty();
   });
 
-});
 
-$("#onload").load("ajax/index.html #container", function(){
-      
-      $("#container").append(searchNews);
-    });
+
 
 </script>
 </body>
