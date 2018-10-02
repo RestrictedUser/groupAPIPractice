@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        img{
+            width: 40%;
+            height: 40%;
+        }
+    </style>
+
+</head>
+<body>
+
+ <form>
+
+  <label for="news-input">News Article</label>
+
+  <input type="text" id="news-input"><br>
+
+  <input id="select-article" type="submit" value="GO!">
+ </form>
+
+ <div id="news-div"></div>
+ 
+ <div class="onload"></div>
+ <div class="container"></div>
+    
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+
+
+
+function searchNews(news){
+    var queryURL = 'https://newsapi.org/v2/everything?' +
+          'q=raiders' + news + '&' +
+          'from=2018-09-29&' +
+          'sortBy=popularity&' +
+          'apiKey=7ec980d795c04ff1adf6aff993c1eff9';
+
+
+$.ajax({
+    url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+        
+        console.log(response);
+        
+        $(".container").attr("src", response.articles[0].urlToImage);
+
+        
+        
+        var authorName = $("<p>").text("Author: " + response.articles[0].author);
+        var newsURL = $("<img>").attr("src", response.articles[0].urlToImage);
+        var discription = $("<p>").text("Discription: " + response.articles[0].description);
+        var newstitle = $("<h1>").text(response.articles[0].title);
+
+      $("#news-div").empty();
+      $("#news-div").append(newsURL, newstitle, authorName, discription);
+     
+    });
+}
+
+$("#select-article").on("click", function(event) {
+    // Preventing the button from trying to submit the form
+    event.preventDefault();
+    // Storing the artist name
+    var inputArticle = $("#news-input").val().trim();
+
+    // Running searchNews function(passing in the artist as an argument)
+    searchNews(inputArticle);
+    $("#news-div").empty();
+  });
+
+});
+
+$("#onload").load("ajax/index.html #container", function(){
+      
+      $("#container").append(searchNews);
+    });
+
+</script>
+</body>
+</html>
