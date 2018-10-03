@@ -65,7 +65,7 @@ $.ajax({
 
         console.log(response);
         
-        var random = Math.floor(Math.random() * 10) + 1;
+        var random = Math.floor(Math.random() * 21) + 1;
         
         var authorName = $("<p>").text("Author: " + response.articles[random].author);
         var loadOut = $("<img>").attr("src", response.articles[random].urlToImage);
@@ -83,13 +83,13 @@ $.ajax({
 function searchNews(news){
     
     var queryURL = 'https://newsapi.org/v2/everything?' +
-          'q=NFL' + '&' +
+          'q=' + news + '&' +
           'from=2018-09-29&' +
           'sortBy=popularity&' +
           'apiKey=7ec980d795c04ff1adf6aff993c1eff9' + '&' +
           APIKey;
 
-    var random = Math.floor(Math.random() * 10) + 1;
+    var random = Math.floor(Math.random() * 21) + 1;
           
 
 
